@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="{% static 'assets/js/delete-url.js' %}"></script>
+
+</head>
+<body>
+    <h1>URL Shortner</h1>
+    <form action = "{% url 'shorten' %}" method = "post">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Create">
+    </form>
+    <br>
+    {% if shortened_url %}
+    <p>Created your short url:- {{shortened_url}}</p>
+    {% endif %}
+    {% if message %}
+    <p>{{message}}</p>
+    {% endif %}
+    <br>
+    {% if data %}
+        <table border="1">
+            <thead>
+                <th>Full url</th>
+                <th>Short url</th>
+                <th>Clicks</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+            {% for i in data %}
+                <tr>
+                    <td>{{i.full_url}}</td>
+                    <td><a href="{% url 'redirect' short_url=i.shortened_url %}" target="_blank">{{i.shortened_url}}</a></td>
+                    <td>{{i.clicks}}</td>
+                    <td><!-- Delete URL Form -->
+                        <form action="{% url 'delete' short_url=i.shortened_url %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% endif %}
+</body>
+</html>

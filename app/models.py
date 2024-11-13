@@ -8,4 +8,4 @@ class Urls(models.Model):
     clicks = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.full_url)
+        return str(self.full_url + " - " + self.shortened_url)
